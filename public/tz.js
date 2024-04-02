@@ -1,0 +1,2 @@
+//DO NOT EDIT
+const pc=(c)=>c.split(';').map((x)=>x.trim()).filter((x)=>x.length>0).map(e=>e.split('=')).reduce((a,b)=>({...a,[b[0]]:b[1]}),{});;const c = pc(document.cookie);if(!('tz'in c)){document.cookie = `tz=${Intl.DateTimeFormat().resolvedOptions().timeZone};`;}

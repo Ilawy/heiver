@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1712071402903,
+      "tag": "0000_cooing_darkhawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1712072145991,
+      "tag": "0001_round_ben_parker",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712072546259,
+      "tag": "0002_lethal_thunderbolt",
+      "breakpoints": true
+    }
+  ]
+}
