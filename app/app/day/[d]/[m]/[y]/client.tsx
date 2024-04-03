@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { type submitDayData as _submitDayData } from "./page";
+import { type submitDayData as _submitDayData } from "@/lib/actions";
 function FormWaiter({
   setLoading,
 }: {
