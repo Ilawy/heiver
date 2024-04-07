@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { type submitDayData as _submitDayData } from "@/lib/actions";
+import { revalidatePath } from "next/cache";
+import { usePathname } from "next/navigation";
 function FormWaiter({
   setLoading,
 }: {
@@ -164,13 +166,6 @@ export default function Client({ submitDayData, date }: {
       </div>
     );
   } else {
-    return (
-      <motion.main
-        className="w-full h-screen flex items-center justify-center"
-      >
-        Thank you
-        
-      </motion.main>
-    );
+    
   }
 }

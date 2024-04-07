@@ -22,6 +22,27 @@
       "when": 1712072546259,
       "tag": "0002_lethal_thunderbolt",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1712173227429,
+      "tag": "0003_previous_blindfold",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1712173482163,
+      "tag": "0004_opposite_molly_hayes",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1712477984746,
+      "tag": "0005_mature_talisman",
+      "breakpoints": true
     }
   ]
 }

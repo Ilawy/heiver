@@ -159,6 +159,40 @@ h2:not(.native) {
     }
 
 
+    &:is(label).input{
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    &:is(input) {
+        border: 1px solid #eee;
+        padding: 0.5rem;
+        border-radius: theme('borderRadius.md');
+    }
+
+
+    &:is(dialog){
+        border: 1px solid #eee;
+        padding: 1rem;
+        border-radius: theme('borderRadius.md');
+        min-width: 20rem;
+
+        &::view-transition-new{
+            animation: fadein 5s;
+        }
+    }
+
+}
+
+@keyframes fadein {
+    from {
+        background: red;
+    }
+    to {
+        background: yellow;
+        
+    }
 }
 
 
