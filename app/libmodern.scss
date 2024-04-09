@@ -49,20 +49,22 @@
 $blue: hex_hsl(#8B93FF);
 
 
-button:not(.native) {
+button:not(.native),
+.as-button {
     padding: 0.5rem 2rem;
     border-radius: theme('borderRadius.xl');
     background: theme('colors.blue.500');
     color: white;
     box-shadow: 3px 2px 6px 3px theme('colors.blue.200'), 0 0 0 2px theme('colors.blue.500'), 0 0 0 4px theme('colors.blue.200');
     transition: box-shadow 325ms;
+
     &:hover {
         box-shadow: 3px 2px 4px 4px theme('colors.blue.200'),
             0 0 0 4px theme('colors.blue.500'),
             0 0 0 6px theme('colors.blue.200');
     }
 
-    &:active{
+    &:active {
         box-shadow: 3px 2px 4px 4px theme('colors.blue.400'),
             0 0 0 4px theme('colors.blue.400'),
             0 0 0 6px theme('colors.blue.400') !important;
@@ -72,8 +74,11 @@ button:not(.native) {
 
 
 
+
+
+
 header {
-    padding: 0.5rem 2rem;
+    padding: 0.75rem 2rem;
     background: white;
     color: black;
     min-height: 3.5rem;
@@ -159,7 +164,7 @@ h2:not(.native) {
     }
 
 
-    &:is(label).input{
+    &:is(label).input {
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
@@ -172,16 +177,61 @@ h2:not(.native) {
     }
 
 
-    &:is(dialog){
+    &:is(dialog) {
         border: 1px solid #eee;
         padding: 1rem;
         border-radius: theme('borderRadius.md');
         min-width: 20rem;
 
-        &::view-transition-new{
+        &::view-transition-new {
             animation: fadein 5s;
         }
     }
+
+
+
+    &:is(blockquote) {
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+        border-radius: theme('borderRadius.md');
+
+        &.info {
+            &::before {
+                content: "!";
+                font-family: monospace;
+                width: 18px;
+                height: 18px;
+                margin-right: 0.5rem;
+                font-weight: 700;
+                border: 1px solid currentColor;
+                border-radius: 50%;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            background: theme('colors.blue.100');
+            color: theme('colors.blue.700');
+        }
+
+        &.warning {
+            background: theme('colors.yellow.100');
+            color: theme('colors.yellow.700');
+
+            &::before {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                content: "⚠";
+                width: 18px;
+                height: 18px;
+                font-size: larger;
+            }
+        }
+    }
+
+
+
 
 }
 
@@ -189,9 +239,10 @@ h2:not(.native) {
     from {
         background: red;
     }
+
     to {
         background: yellow;
-        
+
     }
 }
 
@@ -291,4 +342,76 @@ h2:not(.native) {
         }
     }
 
+}
+
+
+.select {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+    justify-content: space-between;
+    user-select: none;
+
+    &.vertical {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    label {
+        background: theme('colors.gray.50');
+        border-radius: theme('borderRadius.md');
+        border: 1px solid theme('colors.gray.300');
+        padding: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:has(input[type="radio"]:checked) {
+            border-color: theme('colors.blue.500');
+        }
+
+        input[type="radio"] {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
+}
+
+
+
+
+
+.gg-info {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    transform: scale(var(--ggs, 1));
+    width: 20px;
+    height: 20px;
+    border: 2px solid;
+    border-radius: 40px
+}
+
+.gg-info::after,
+.gg-info::before {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    border-radius: 3px;
+    width: 2px;
+    background: currentColor;
+    left: 7px
+}
+
+.gg-info::after {
+    bottom: 2px;
+    height: 8px
+}
+
+.gg-info::before {
+    height: 2px;
+    top: 2px
 }

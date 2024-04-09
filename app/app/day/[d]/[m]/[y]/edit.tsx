@@ -17,7 +17,7 @@ function FormWaiter({
   return null;
 }
 
-export default function Client({ submitDayData, date }: {
+export default function Edit({ submitDayData, date }: {
   submitDayData: typeof _submitDayData;
   date: {
     year: number;

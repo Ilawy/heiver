@@ -16,7 +16,8 @@ export const Tusers = sqliteTable('users', {
     name: text('name'),
     email: text('email').notNull().unique("email_unique"),
     username: text('username').notNull().unique("username_unique"),
-    password: text('password').notNull()
+    password: text('password').notNull(),
+    timezone: text('timezone'),
 })
 
 export const Tdays = sqliteTable('days', {
@@ -48,4 +49,8 @@ export const Tsessions = sqliteTable("session", {
 
 export const Idays = {
     select: createSelectSchema(Tdays)
+}
+
+export const IUsers = {
+    select: createSelectSchema(Tusers)
 }

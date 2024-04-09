@@ -1,7 +1,7 @@
 import { cookies, headers } from "next/headers";
 import { DateTime } from "luxon";
 import { MAX_ALLOWED_FUTURE, MAX_ALLOWED_PAST } from "@/lib/consts";
-import Client from "./client";
+import Edit from "./edit";
 import { z } from "zod";
 import { log } from "console";
 import { AnimatePresence } from "framer-motion";
@@ -12,8 +12,6 @@ import Display from "./display";
 import { getMonthAVG, isRecordedToday, submitDayData } from "@/lib/actions";
 import { getSession } from "@/lib/auth";
 // import { validateRequest } from "@/lib/auth";
-
-
 
 export default async function Page(props: {
   params: {
@@ -35,10 +33,10 @@ export default async function Page(props: {
   const y = Number(strYear);
   const m = Number(strMonth);
   const d = Number(strDay);
-  const today = DateTime.now();  
+  const today = DateTime.now();
   const thatDay = DateTime.fromObject({ year: y, month: m, day: d }, {
     zone: tz?.value,
-  });    
+  });
   if (!thatDay.isValid) return <InvalidDay />;
   const diff = Math.round(thatDay.diff(today, ["days"]).days);
   if (
@@ -49,7 +47,11 @@ export default async function Page(props: {
   ) {
     console.log("alot", today, thatDay, diff);
 
-    return <UnmodDay />;
+    return (
+      <Shell date={{ year: y, month: m, day: d }}>
+        <UnmodDay date={{ year: y, month: m, day: d }} tz={tz?.value!} />
+      </Shell>
+    );
   }
 
   //   const isModifiable = today;
@@ -61,37 +63,61 @@ export default async function Page(props: {
   );
   if (rows.length === 0) {
     return (
-      <Client
-        date={{
-          year: y,
-          month: m,
-          day: d,
-        }}
-        submitDayData={submitDayData}
-      />
+      <Shell date={{ year: y, month: m, day: d }}>
+        <Edit
+          date={{
+            year: y,
+            month: m,
+            day: d,
+          }}
+          submitDayData={submitDayData}
+        />
+      </Shell>
     );
   } else {
     //display day
     const data = rows[0]!;
     const avg = await getMonthAVG(session!.user!.id, m);
-    const todayRecorded = await isRecordedToday(1)    
-    
+    const todayRecorded = await isRecordedToday(1);
+
     return (
-      <Display
-        tz={tz?.value!}
-        diff={diff}
-        data={data}
-        avg={avg}
-        todayRecorded={todayRecorded}
-      />
+      <Shell date={{ year: y, month: m, day: d }}>
+        <Display
+          tz={tz?.value!}
+          diff={diff}
+          data={data}
+          avg={avg}
+          todayRecorded={todayRecorded}
+        />
+      </Shell>
     );
   }
 }
 
-function UnmodDay() {
+function UnmodDay({ date, tz }: {
+  date: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  tz: string;
+}) {
+  const today = DateTime.now().setZone(tz);
+  const isFuture = today.diff(DateTime.fromObject(date), ["days"]).days < 0;
+  console.log(isFuture);
+
+  if (isFuture) {
+    return (
+      <div className="p-3">
+        <h1>Why are you here?</h1>
+        <p>There is no way to predict the future</p>
+      </div>
+    );
+  }
   return (
-    <div>
-      You cant edit this day
+    <div className="p-3">
+      <h1>That was too late</h1>
+      <p>No one can edit the past, friend</p>
     </div>
   );
 }
@@ -101,5 +127,44 @@ function InvalidDay() {
     <div>
       Seems like this is not a valid day
     </div>
+  );
+}
+
+function Shell({ date, children }: {
+  date: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  children: React.ReactNode;
+}) {
+  const nextDate = DateTime.fromObject({
+    year: date.year,
+    month: date.month,
+    day: date.day,
+  }).plus({ day: 1 });
+  const prevDate = DateTime.fromObject({
+    year: date.year,
+    month: date.month,
+    day: date.day,
+  }).minus({ day: 1 });
+  return (
+    <>
+      {children}
+      <div className="flex gap-2 p-3 items-center justify-between">
+        <a
+          className="as-button"
+          href={`/app/day/${prevDate.day}/${prevDate.month}/${prevDate.year}`}
+        >
+          Prev
+        </a>
+        <a
+          className="as-button"
+          href={`/app/day/${nextDate.day}/${nextDate.month}/${nextDate.year}`}
+        >
+          Next
+        </a>
+      </div>
+    </>
   );
 }

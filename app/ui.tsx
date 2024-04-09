@@ -6,11 +6,5 @@ export default function UI({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <AnimatePresence>
-        {children}
-      </AnimatePresence>
-    </motion.main>
-  );
+  return children
 }

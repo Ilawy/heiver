@@ -4,6 +4,7 @@ import "./globals.css";
 import "./libmodern.scss";
 import Script from "next/script";
 import UI from "./ui";
+import Link from "next/link";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,11 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={''}>
+      <body className={'max-w-xl mx-auto'}>
         <header>
           <b>Hello world</b>
           <div>
-            <button>Login</button>
+              <Link href={"/app/profile"}>Profile</Link>
           </div>
         </header>
         <UI>

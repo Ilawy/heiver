@@ -9,17 +9,12 @@ import "server-only";
 import { generateId, Scrypt } from "lucia";
 import { LibsqlError } from "@libsql/client";
 import { getSession, lucia } from "./auth";
-import { redirect } from "next/navigation";
-import { P, match } from "ts-pattern";
+import { RedirectType, redirect } from "next/navigation";
+import { match, P } from "ts-pattern";
 import { RedisKV } from "./kv";
 import { env } from "./consts";
 import { createClient } from "redis";
-
-
-
-
-
-
+import { revalidatePath } from "next/cache";
 
 export async function getMonthAVG(userId: string, month: number): Promise<{
   days: number;
@@ -83,7 +78,7 @@ export async function submitDayData(
   "use server";
   const session = await getSession();
   //TODO: check if this is necessary
-  if(!session)throw new Error("no session found");
+  if (!session) throw new Error("no session found");
   if (fd.get("note") === "") fd.delete("note");
   const schema = formData({
     religion: numeric(),
@@ -101,7 +96,6 @@ export async function submitDayData(
       error: structuredClone(output.error.message),
     };
   } else {
-    
     const result = await db.insert(Tdays).values({
       date: output.data.date,
       owner: session.user.id,
@@ -215,18 +209,67 @@ export async function login(
         error: "incorrect password",
       };
     }
-    const session = await lucia.createSession(user[0].id, {})
-    const cookie = lucia.createSessionCookie(session.id)
-    cookies().set(cookie.name, cookie.value, cookie.attributes)
-    return redirect("/app")
-    
+    const session = await lucia.createSession(user[0].id, {});
+    const cookie = lucia.createSessionCookie(session.id);
+    cookies().set(cookie.name, cookie.value, cookie.attributes);
+    return redirect("/app");
   }
 }
 
+
+
 type ActionResult = {
   ok: true;
-  action: any;
+  data: any
 } | {
   ok: false;
   error: string;
 };
+
+
+
+
+
+export async function updateName(fd: FormData) {
+  "use server";
+  const schema = z.string().min(3).max(255);
+  const output = schema.safeParse(fd.get("name"));
+  if (!output.success) {
+    return {
+      ok: false,
+      error: `malformed payload ${output.error.message}`,
+    };
+  }
+  const newName = output.data;
+  const session = await getSession();
+  await db
+    .update(Tusers)
+    .set({ name: newName })
+    .where(eq(Tusers.id, session!.user!.id));
+  revalidatePath("/app/settings", "page");
+}
+
+
+
+export async function updateTimeZone(_: unknown, fd: FormData): Promise<ActionResult>{
+  "use server";
+  const schema = z.string().min(3).max(255);
+  const output = schema.safeParse(fd.get("timezone"));
+  if (!output.success) {
+    return {
+      ok: false,
+      error: `malformed payload ${output.error.message}`,
+    };
+  }
+  const newTimeZone = output.data;
+  const session = await getSession();
+  await db
+    .update(Tusers)
+    .set({ timezone: newTimeZone })
+    .where(eq(Tusers.id, session!.user!.id));
+  revalidatePath("/app/settings", "page");
+  return {
+    ok: true,
+    data: newTimeZone
+  }
+}
