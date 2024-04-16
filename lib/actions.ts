@@ -16,7 +16,7 @@ import { env } from "./consts";
 import { createClient } from "redis";
 import { revalidatePath } from "next/cache";
 
-type Result<T = any> = { ok: true; data: T } | { ok: false; error: string };
+export type Result<T = any> = { ok: true; data: T } | { ok: false; error: string };
 
 export async function getMonthAVG(
   userId: string,
@@ -110,7 +110,7 @@ export async function submitDayData(
   }
 }
 
-export async function signup(_: unknown, fd: FormData): Promise<ActionResult> {
+export async function signup(_: unknown, fd: FormData): Promise<Result> {
   "use server";
   const schema = formData({
     username: z.string().min(3).max(32),
@@ -152,7 +152,7 @@ export async function signup(_: unknown, fd: FormData): Promise<ActionResult> {
 }
 
 export async function login(
-  prev: unknown,
+  // prev: unknown,
   fd: FormData,
 ): Promise<Result> {
   "use server";
@@ -219,13 +219,6 @@ export async function login(
   }
 }
 
-type ActionResult = {
-  ok: true;
-  data: any;
-} | {
-  ok: false;
-  error: string;
-};
 
 export async function updateName(fd: FormData) {
   "use server";
@@ -256,7 +249,7 @@ export async function updateName(fd: FormData) {
 export async function updateTimeZone(
   _: unknown,
   fd: FormData,
-): Promise<ActionResult> {
+): Promise<Result> {
   "use server";
   try {
     const schema = z.string().min(3).max(255);
