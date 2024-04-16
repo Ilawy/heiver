@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "predeploy": "npm run build && npx dotenv-cli -e .env.prod npx drizzle-kit generate:sqlite && npx dotenv-cli -e .env.prod npx drizzle-kit push:sqlite"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.1.1",
+    "@ilawy/eslint-plugin-await-catch": "npm:@jsr/ilawy__eslint-plugin-await-catch@^1.0.1",
     "@libsql/client": "^0.6.0",
     "@lucia-auth/adapter-drizzle": "^1.0.7",
     "@types/luxon": "^3.4.2",
@@ -41,6 +43,8 @@
     "drizzle-kit": "^0.20.14",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-typesafe": "^0.5.2",
     "postcss": "^8",
     "sass": "^1.72.0",
     "tailwindcss": "^3.3.0",

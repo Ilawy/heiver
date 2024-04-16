@@ -5,6 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { type submitDayData as _submitDayData } from "@/lib/actions";
 import { revalidatePath } from "next/cache";
 import { usePathname } from "next/navigation";
+import { DateTime } from "luxon";
 function FormWaiter({
   setLoading,
 }: {
@@ -27,6 +28,7 @@ export default function Edit({ submitDayData, date }: {
 }) {
   const [loading, setLoading] = useState(false);
   const [state, action] = useFormState(submitDayData, null);
+  const day = DateTime.fromObject(date);
 
   if (state === null) {
     return (
@@ -36,6 +38,8 @@ export default function Edit({ submitDayData, date }: {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
+        <h1>Edit your day</h1>
+        <h2>{day.toLocaleString(DateTime.DATE_FULL)}</h2>
         <form action={action} id="form_main">
           <input hidden readOnly type="text" name="date" value={JSON.stringify(date)} />
           <FormWaiter setLoading={setLoading} />
@@ -166,6 +170,7 @@ export default function Edit({ submitDayData, date }: {
       </div>
     );
   } else {
-    
+    //TODO: handle ui
+    return <div>UNHANDLED UI</div>;
   }
 }

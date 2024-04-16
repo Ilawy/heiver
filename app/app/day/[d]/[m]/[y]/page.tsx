@@ -1,3 +1,4 @@
+/* eslint-disable typesafe/no-await-without-trycatch */
 import { cookies, headers } from "next/headers";
 import { DateTime } from "luxon";
 import { MAX_ALLOWED_FUTURE, MAX_ALLOWED_PAST } from "@/lib/consts";
@@ -9,7 +10,11 @@ import { db } from "@/lib/db";
 import { Tdays } from "@/lib/db/schema";
 import { and, eq } from "drizzle-orm";
 import Display from "./display";
-import { getMonthAVG, isRecordedToday, submitDayData } from "@/lib/actions";
+import {
+  deleteDay,
+  getMonthAVG,
+  submitDayData,
+} from "@/lib/actions";
 import { getSession } from "@/lib/auth";
 // import { validateRequest } from "@/lib/auth";
 
@@ -20,7 +25,9 @@ export default async function Page(props: {
     y: string;
   };
 }) {
-  const session = await getSession();
+  const session = await getSession().catch(e=>{
+    console.log(e);
+  });
   const tz = cookies().get("tz");
   const {
     d: strDay,
@@ -33,7 +40,7 @@ export default async function Page(props: {
   const y = Number(strYear);
   const m = Number(strMonth);
   const d = Number(strDay);
-  const today = DateTime.now();
+  const today = DateTime.now().setZone(tz?.value);
   const thatDay = DateTime.fromObject({ year: y, month: m, day: d }, {
     zone: tz?.value,
   });
@@ -78,7 +85,6 @@ export default async function Page(props: {
     //display day
     const data = rows[0]!;
     const avg = await getMonthAVG(session!.user!.id, m);
-    const todayRecorded = await isRecordedToday(1);
 
     return (
       <Shell date={{ year: y, month: m, day: d }}>
@@ -87,7 +93,7 @@ export default async function Page(props: {
           diff={diff}
           data={data}
           avg={avg}
-          todayRecorded={todayRecorded}
+          deleteDay={deleteDay}
         />
       </Shell>
     );
