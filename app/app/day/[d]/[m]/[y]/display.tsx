@@ -16,7 +16,8 @@ export default async function Display({
   data: z.infer<typeof Idays.select>;
   diff: number;
   avg: Awaited<ReturnType<typeof getMonthAVG>>;
-  tz: string;
+  //TODO: make required
+  tz?: string;
   deleteDay: typeof _deleteDay
 }) {
   const dateData = data.date as DayDate;

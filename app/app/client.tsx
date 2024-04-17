@@ -3,6 +3,10 @@ import { MAX_ALLOWED_PAST, createCalendar } from "@/lib/consts";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
+
+
+
+
 export default function Client() {    
   const today = new Date();
   const calendar = createCalendar(today.getFullYear(), today.getMonth() + 1, 6);
@@ -49,8 +53,7 @@ export default function Client() {
                       className={`day native ${
                         day.dayNumber === today.getDate() ? "active" : ""
                       }${
-                        (day.dayNumber + MAX_ALLOWED_PAST <
-                              today.getDate() ||
+                        (
                             day.dayNumber > today.getDate())
                           ? "disabled"
                           : ""

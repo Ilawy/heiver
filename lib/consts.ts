@@ -1,6 +1,6 @@
 import { cache } from "react";
 
-export const MAX_ALLOWED_PAST = 3;
+export const MAX_ALLOWED_PAST = 0;
 export const MAX_ALLOWED_FUTURE = 0;
 
 

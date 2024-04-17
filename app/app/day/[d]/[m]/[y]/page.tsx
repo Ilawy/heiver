@@ -7,16 +7,36 @@ import { z } from "zod";
 import { log } from "console";
 import { AnimatePresence } from "framer-motion";
 import { db } from "@/lib/db";
-import { Tdays } from "@/lib/db/schema";
+import { IUsers, Tdays, Tusers } from "@/lib/db/schema";
 import { and, eq } from "drizzle-orm";
 import Display from "./display";
-import {
-  deleteDay,
-  getMonthAVG,
-  submitDayData,
-} from "@/lib/actions";
+import { deleteDay, getMonthAVG, submitDayData } from "@/lib/actions";
 import { getSession } from "@/lib/auth";
+import { DatabaseSession, Session, User } from "lucia";
 // import { validateRequest } from "@/lib/auth";
+
+
+
+async function getDay({ year, month, day }: DateTime, userId: z.infer<typeof IUsers.select>['id']){
+  const rows = await db.select().from(Tdays).where(
+    and(
+      eq(Tdays.date, { year, month, day }),
+      eq(Tdays.owner, userId),
+    ),
+  )
+  if(rows.length === 0) return null
+  return rows[0]
+}
+
+
+function getTimeZone(user: User) {
+  const c = cookies()
+  if(user.timezone)return user.timezone
+  else if(c.has("tz"))return c.get("tz")!.value as string
+  else return null
+}
+
+
 
 export default async function Page(props: {
   params: {
@@ -25,10 +45,11 @@ export default async function Page(props: {
     y: string;
   };
 }) {
-  const session = await getSession().catch(e=>{
-    console.log(e);
-  });
-  const tz = cookies().get("tz");
+  const session = await getSession()
+  if(!session) throw new Error("FATAL")
+    //TODO: ensure that timezone is always 
+  const tz = getTimeZone(session!.user)
+
   const {
     d: strDay,
     m: strMonth,
@@ -40,37 +61,43 @@ export default async function Page(props: {
   const y = Number(strYear);
   const m = Number(strMonth);
   const d = Number(strDay);
-  const today = DateTime.now().setZone(tz?.value);
+  //TODO: reset time at `_today` object
+  const _today = DateTime.now().setZone(tz || undefined);
+  const absToday = DateTime.fromObject({
+    day: _today.day,
+    month: _today.month,
+    year: _today.year,
+  });
   const thatDay = DateTime.fromObject({ year: y, month: m, day: d }, {
-    zone: tz?.value,
+    zone: tz || undefined,
   });
   if (!thatDay.isValid) return <InvalidDay />;
-  const diff = Math.round(thatDay.diff(today, ["days"]).days);
+  const diff = Math.round(
+    thatDay.diff(absToday, ["days"], {
+      conversionAccuracy: "longterm",
+    }).days,
+  );
+  
   if (
-    //in past AND not in allowed range
-    (diff < 0 && diff * -1 > MAX_ALLOWED_PAST) ||
-    //in future AND not in allowed range
-    (diff > 0 && diff > MAX_ALLOWED_FUTURE)
-  ) {
-    console.log("alot", today, thatDay, diff);
+    // //in past AND not in allowed range
+    // (diff < 0 && diff * -1 > MAX_ALLOWED_PAST) ||
+    // //in future AND not in allowed range AND
+    // (diff > 0 && diff > MAX_ALLOWED_FUTURE)
 
+    diff !== 0
+  ) {
     return (
-      <Shell date={{ year: y, month: m, day: d }}>
-        <UnmodDay date={{ year: y, month: m, day: d }} tz={tz?.value!} />
+      <Shell date={{ year: y, month: m, day: d }} tz={tz || undefined}>
+        <UnmodDay date={{ year: y, month: m, day: d }} tz={tz || undefined} />
       </Shell>
     );
   }
 
   //   const isModifiable = today;
-  const rows = await db.select().from(Tdays).where(
-    and(
-      eq(Tdays.date, { year: y, month: m, day: d }),
-      eq(Tdays.owner, session!.user!.id),
-    ),
-  );
-  if (rows.length === 0) {
+  const day = await getDay(thatDay, session!.user!.id);
+  if (day === null) {
     return (
-      <Shell date={{ year: y, month: m, day: d }}>
+      <Shell date={{ year: y, month: m, day: d }} tz={tz || undefined}>
         <Edit
           date={{
             year: y,
@@ -83,15 +110,14 @@ export default async function Page(props: {
     );
   } else {
     //display day
-    const data = rows[0]!;
     const avg = await getMonthAVG(session!.user!.id, m);
 
     return (
       <Shell date={{ year: y, month: m, day: d }}>
         <Display
-          tz={tz?.value!}
+          tz={tz || undefined}
           diff={diff}
-          data={data}
+          data={day}
           avg={avg}
           deleteDay={deleteDay}
         />
@@ -106,7 +132,8 @@ function UnmodDay({ date, tz }: {
     month: number;
     day: number;
   };
-  tz: string;
+  //TODO: make required
+  tz?: string;
 }) {
   const today = DateTime.now().setZone(tz);
   const isFuture = today.diff(DateTime.fromObject(date), ["days"]).days < 0;
@@ -136,14 +163,27 @@ function InvalidDay() {
   );
 }
 
-function Shell({ date, children }: {
+function Shell({ date, children, tz }: {
   date: {
     year: number;
     month: number;
     day: number;
   };
   children: React.ReactNode;
+  //TODO: make required
+  tz?: string;
 }) {
+  const currentDate = DateTime.now()
+    .setZone(tz)
+    .set({
+      hour: 0,
+      minute: 0,
+    });
+  console.log(currentDate);
+  const ipHeader = ["x-real-ip", "x-forwarded-for"].find(x => headers().has(x))
+  const ip = ipHeader ? headers().get(ipHeader) : undefined
+
+
   const nextDate = DateTime.fromObject({
     year: date.year,
     month: date.month,
@@ -157,6 +197,7 @@ function Shell({ date, children }: {
   return (
     <>
       {children}
+      {ip}
       <div className="flex gap-2 p-3 items-center justify-between">
         <a
           className="as-button"
