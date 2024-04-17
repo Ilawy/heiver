@@ -117,7 +117,7 @@ export default function Client({
                 return (
                   <div
                     key={wIndex * 7 + dIndex}
-                    className="day disabled bg-gray-50"
+                    className="day disabled"
                   >
                   </div>
                 );
