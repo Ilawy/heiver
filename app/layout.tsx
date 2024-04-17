@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={'max-w-xl mx-auto'}>
         <header>
-          <b>Hello world</b>
+          <Link href={"/app"}>RLH</Link>
           <div>
               <Link href={"/app/settings"}>Settings</Link>
           </div>

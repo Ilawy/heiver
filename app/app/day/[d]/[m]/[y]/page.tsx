@@ -33,7 +33,7 @@ async function getDay(
 async function getTimeZone(user: User) {
   const c = cookies();
   if (user.timezone) return user.timezone;
-  else if (c.has("tz")) return c.get("tz")!.value as string;
+  // else if (c.has("tz")) return c.get("tz")!.value as string;
   redirect("/app/settings/tz", RedirectType.replace);
   // const ipHeader = ["x-real-ip", "x-forwarded-for"].find(x => headers().has(x))
   // // const ip = ipHeader ? headers().get(ipHeader) : undefined
