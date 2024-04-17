@@ -23,7 +23,7 @@ export default function RootLayout({
         <header>
           <b>Hello world</b>
           <div>
-              <Link href={"/app/profile"}>Profile</Link>
+              <Link href={"/app/settings"}>Settings</Link>
           </div>
         </header>
         <UI>

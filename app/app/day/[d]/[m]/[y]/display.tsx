@@ -66,7 +66,6 @@ export default async function Display({
       confirm="Are you sure you want to delete this record?"
       className="w-full">
         <input type="hidden" name="id" value={data.id} />
-        <button className="danger w-full">Delete Record</button>
       </Formatic>
     </main>
   );

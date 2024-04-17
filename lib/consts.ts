@@ -11,6 +11,10 @@ export function env(key: string, relax = false) {
   return process.env[key]!;
 }
 
+
+
+export const cn = (...cnames: (string | null | boolean | undefined)[]) => cnames.filter(Boolean).join(" ");
+
 export function createCalendar(year: number, month: number, firstDayOfWeek = 0) {
   const calendar = [];
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

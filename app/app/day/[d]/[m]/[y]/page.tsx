@@ -13,30 +13,43 @@ import Display from "./display";
 import { deleteDay, getMonthAVG, submitDayData } from "@/lib/actions";
 import { getSession } from "@/lib/auth";
 import { DatabaseSession, Session, User } from "lucia";
+import { redirect, RedirectType } from "next/navigation";
 // import { validateRequest } from "@/lib/auth";
 
-
-
-async function getDay({ year, month, day }: DateTime, userId: z.infer<typeof IUsers.select>['id']){
+async function getDay(
+  { year, month, day }: DateTime,
+  userId: z.infer<typeof IUsers.select>["id"],
+) {
   const rows = await db.select().from(Tdays).where(
     and(
       eq(Tdays.date, { year, month, day }),
       eq(Tdays.owner, userId),
     ),
-  )
-  if(rows.length === 0) return null
-  return rows[0]
+  );
+  if (rows.length === 0) return null;
+  return rows[0];
 }
 
+async function getTimeZone(user: User) {
+  const c = cookies();
+  if (user.timezone) return user.timezone;
+  else if (c.has("tz")) return c.get("tz")!.value as string;
+  redirect("/app/settings/tz", RedirectType.replace);
+  // const ipHeader = ["x-real-ip", "x-forwarded-for"].find(x => headers().has(x))
+  // // const ip = ipHeader ? headers().get(ipHeader) : undefined
+  // const ip = "197.133.89.241"
+  // //TODO: set timezone for local developmnent
+  // // if(ip === "::1") return "America/New_York"
+  // if(false)void 0
+  // else{
+  //   const checkerURL = new URL("https://ipinfo.io/widget/demo/")
+  //   checkerURL.pathname += `${ip}`
+  //   console.log(
+  //     (await fetch(checkerURL).then((x) => x.json())).data.timezone,
+  //   );
 
-function getTimeZone(user: User) {
-  const c = cookies()
-  if(user.timezone)return user.timezone
-  else if(c.has("tz"))return c.get("tz")!.value as string
-  else return null
+  // }
 }
-
-
 
 export default async function Page(props: {
   params: {
@@ -45,10 +58,11 @@ export default async function Page(props: {
     y: string;
   };
 }) {
-  const session = await getSession()
-  if(!session) throw new Error("FATAL")
-    //TODO: ensure that timezone is always 
-  const tz = getTimeZone(session!.user)
+  const session = await getSession();
+  if (!session) throw new Error("FATAL");
+  //TODO: ensure that timezone is always present
+  const tz = await getTimeZone(session!.user);
+  console.log(tz);
 
   const {
     d: strDay,
@@ -77,14 +91,15 @@ export default async function Page(props: {
       conversionAccuracy: "longterm",
     }).days,
   );
-  
+  const day = await getDay(thatDay, session!.user!.id);
+
   if (
     // //in past AND not in allowed range
     // (diff < 0 && diff * -1 > MAX_ALLOWED_PAST) ||
     // //in future AND not in allowed range AND
     // (diff > 0 && diff > MAX_ALLOWED_FUTURE)
 
-    diff !== 0
+    diff !== 0 && !day
   ) {
     return (
       <Shell date={{ year: y, month: m, day: d }} tz={tz || undefined}>
@@ -94,7 +109,6 @@ export default async function Page(props: {
   }
 
   //   const isModifiable = today;
-  const day = await getDay(thatDay, session!.user!.id);
   if (day === null) {
     return (
       <Shell date={{ year: y, month: m, day: d }} tz={tz || undefined}>
@@ -180,9 +194,6 @@ function Shell({ date, children, tz }: {
       minute: 0,
     });
   console.log(currentDate);
-  const ipHeader = ["x-real-ip", "x-forwarded-for"].find(x => headers().has(x))
-  const ip = ipHeader ? headers().get(ipHeader) : undefined
-
 
   const nextDate = DateTime.fromObject({
     year: date.year,
@@ -197,7 +208,6 @@ function Shell({ date, children, tz }: {
   return (
     <>
       {children}
-      {ip}
       <div className="flex gap-2 p-3 items-center justify-between">
         <a
           className="as-button"
