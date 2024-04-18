@@ -14,6 +14,7 @@ import { deleteDay, getMonthAVG, submitDayData } from "@/lib/actions";
 import { getSession } from "@/lib/auth";
 import { DatabaseSession, Session, User } from "lucia";
 import { redirect, RedirectType } from "next/navigation";
+import { getTimeZone } from "@/app/utils";
 // import { validateRequest } from "@/lib/auth";
 
 async function getDay(
@@ -30,26 +31,6 @@ async function getDay(
   return rows[0];
 }
 
-async function getTimeZone(user: User) {
-  const c = cookies();
-  if (user.timezone) return user.timezone;
-  // else if (c.has("tz")) return c.get("tz")!.value as string;
-  redirect("/app/settings/tz", RedirectType.replace);
-  // const ipHeader = ["x-real-ip", "x-forwarded-for"].find(x => headers().has(x))
-  // // const ip = ipHeader ? headers().get(ipHeader) : undefined
-  // const ip = "197.133.89.241"
-  // //TODO: set timezone for local developmnent
-  // // if(ip === "::1") return "America/New_York"
-  // if(false)void 0
-  // else{
-  //   const checkerURL = new URL("https://ipinfo.io/widget/demo/")
-  //   checkerURL.pathname += `${ip}`
-  //   console.log(
-  //     (await fetch(checkerURL).then((x) => x.json())).data.timezone,
-  //   );
-
-  // }
-}
 
 export default async function Page(props: {
   params: {
@@ -61,7 +42,7 @@ export default async function Page(props: {
   const session = await getSession();
   if (!session) throw new Error("FATAL");
   //TODO: ensure that timezone is always present
-  const tz = await getTimeZone(session!.user);
+  const tz = await getTimeZone(session!.user, redirect);
   console.log(tz);
 
   const {

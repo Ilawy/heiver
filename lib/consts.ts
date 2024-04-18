@@ -14,6 +14,14 @@ export function env(key: string, relax = false) {
 
 
 export const cn = (...cnames: (string | null | boolean | undefined)[]) => cnames.filter(Boolean).join(" ");
+export const startViewTransition = (fn: (()=>void))=>{
+  if("startViewTransition" in document && typeof document.startViewTransition === "function"){
+    const svt = document.startViewTransition as (fn: () => void) => void;
+    document.startViewTransition(fn);
+  }else{
+    fn();
+  }
+}
 
 export function createCalendar(year: number, month: number, firstDayOfWeek = 0) {
   const calendar = [];

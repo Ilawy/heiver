@@ -15,6 +15,7 @@ import { RedisKV } from "./kv";
 import { env } from "./consts";
 import { createClient } from "redis";
 import { revalidatePath } from "next/cache";
+import { LoginActionPayload } from "./types";
 
 export type Result<T = any> = { ok: true; data: T } | { ok: false; error: string };
 
@@ -154,15 +155,12 @@ export async function signup(_: unknown, fd: FormData): Promise<Result> {
 export async function login(
   prev: unknown,
   fd: FormData,
-): Promise<Result> {
+): Promise<Result<true>> {
   "use server";
   try {
-    const schema = formData({
-      usernameOrEmail: z.string().min(3).max(32),
-      password: z.string().min(8).max(255),
-    });
+    
 
-    const output = schema.safeParse(fd);
+    const output = LoginActionPayload.safeParse(fd);
     if (!output.success) {
       return {
         ok: false,
@@ -208,10 +206,10 @@ export async function login(
       const session = await lucia.createSession(user[0].id, {});
       const cookie = lucia.createSessionCookie(session.id);
       cookies().set(cookie.name, cookie.value, cookie.attributes);
-      return redirect("/app");
+      return redirect("/");
     }
   } catch (e) {
-    console.log(e);
+    if(e instanceof Error && e.message === "NEXT_REDIRECT")throw e
     
     return {
       ok: false,

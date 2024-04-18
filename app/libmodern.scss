@@ -40,18 +40,24 @@
 $blue: hex_hsl(#8b93ff);
 
 .button,
-[role=button] {
+[role="button"] {
   padding: 0.5rem 2rem;
   border-radius: theme("borderRadius.xl");
-  background: theme("colors.blue.500");
+  // background: theme("colors.blue.500");
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  
-  background: #2dffc4;
+
+  // background: #2dffc4;
   color: black;
+
+
+  &.ghost{
+    background: none;
+    border: 3px solid currentColor;
+  }
 }
 
 header {
@@ -84,6 +90,14 @@ header {
     // border-right: 1px solid #d1d5db;
     --signed-bg: theme("colors.blue.100");
 
+    @keyframes show {
+      to{
+        opacity: 1;
+      }
+    }
+    animation: show 80ms calc(var(--index) * 10ms) ease-in-out forwards;
+
+    opacity: calc(var(--index) * 1%);
     padding: 0.25rem;
     text-align: center;
     aspect-ratio: 1;
@@ -223,6 +237,38 @@ h2:not(.native) {
     }
   }
 }
+
+
+.switch {
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  gap: 1rem;
+  background: black;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 21e3px;
+
+  label{
+    &:has(input:checked){
+      background: white;
+      color: black;
+
+    }
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 21e3px;
+
+    input {
+      position: absolute;
+      display: none;
+    }
+  }
+}
+
 
 @keyframes fadein {
   from {
@@ -405,16 +451,109 @@ h2:not(.native) {
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 70%;
-    &:first-child{
+    &:first-child {
       translate: 20% 0;
       background: #2dffc4;
-      box-shadow: 0px 0px 90px 10px rgba(45,255,196,0.9);
+      box-shadow: 0px 0px 90px 10px rgba(45, 255, 196, 0.9);
       opacity: 50%;
     }
-    &:last-child{
-      background: #836FFF;
-      box-shadow: 0px 0px 90px 10px rgba(130,111,255,0.9);
+    &:last-child {
+      background: #836fff;
+      box-shadow: 0px 0px 90px 10px rgba(130, 111, 255, 0.9);
       translate: -20% 0%;
     }
   }
 }
+
+.tabs {
+  padding: 0.5rem 1rem;
+  background: #2dffc4;
+  // width: fit-content;
+  width: 100%;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  gap: 1rem;
+  border-radius: 0.25rem;
+  button {
+    isolation: isolate;
+    position: relative;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background: inherit;
+    font-weight: bold;
+    transition: 325ms;
+    flex: 1;
+
+    
+    .indecator{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: -1;
+     border-radius:0.25rem;
+
+    }
+  }
+}
+
+.exp_bg {
+  background-color: #836fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 50%;
+  transition: 325ms;
+  will-change: opacity;
+}
+
+
+
+
+
+
+
+
+
+
+
+.gg-user {
+  display: block;
+  transform: scale(var(--ggs,1));
+  box-sizing: border-box;
+  width: 12px;
+  height: 18px
+ }
+ 
+ .gg-user::after,
+ .gg-user::before {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  border: 2px solid
+ }
+ 
+ .gg-user::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 30px;
+  top: 0;
+  left: 2px
+ }
+ 
+ .gg-user::after {
+  width: 12px;
+  height: 9px;
+  border-bottom: 0;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  top: 9px
+ } 

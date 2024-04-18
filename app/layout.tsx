@@ -5,6 +5,8 @@ import "./libmodern.scss";
 import Script from "next/script";
 import UI from "./ui";
 import {Link, ViewTransitions} from "next-view-transitions";
+import NextTopLoader from 'nextjs-toploader';
+
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +24,7 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en">
         <body className={"max-w-xl mx-auto"}>
+          <NextTopLoader />
           {/* <header>
             <Link href={"/app"}>RLH</Link>
             <div>

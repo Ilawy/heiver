@@ -1,19 +1,14 @@
+import { login } from "@/lib/actions";
+import Client from "./client";
 
-
-
-
-
-export default async function Page() {
-    return (
-        <>
-        
-           <h1 style={{
-            viewTransitionName: "title",
-          width: "fit-content"
-
-           }}>
-            Sign in
-           </h1>
-        </>
-    );
+export default function Page() {
+  
+  return (
+    <main className="flex flex-col p-3 gap-3 min-h-[100svh]">
+     <Client login={login} />
+    </main>
+  );
 }
+
+
+
