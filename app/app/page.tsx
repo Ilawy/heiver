@@ -25,6 +25,9 @@ export default async function AppPage() {
   return (
     <>
       <Client signedDays={signedDays} />
+      <span className="w-fit" style={{
+        viewTransitionName: "vesta"
+      }}>Vesta</span>
     </>
   );
 }

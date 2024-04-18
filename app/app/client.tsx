@@ -2,7 +2,7 @@
 import { cn, createCalendar, MAX_ALLOWED_PAST } from "@/lib/consts";
 import { DayDate } from "@/lib/db/schema";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 function groupBySequence(arr: number[]) {
   if (arr.length === 0) return [];
@@ -43,9 +43,10 @@ export default function Client({
   const signedDaysNumbers = signedDays.map((sd) => sd.date.day).sort((a, b) =>
     a - b
   );
-  const signedGroups = groupBySequence(signedDaysNumbers).map(group=>group.filter(d=>d!==today.getDate()));
+  const signedGroups = groupBySequence(signedDaysNumbers).map((group) =>
+    group.filter((d) => d !== today.getDate())
+  );
   console.log(signedGroups, today.getDay());
-  
 
   return (
     <motion.main
@@ -85,11 +86,9 @@ export default function Client({
                   const signedGroup = signedGroups.find((g) =>
                     g.includes(day.dayNumber!)
                   );
-                  const isActive = day.dayNumber === today.getDate() 
+                  const isActive = day.dayNumber === today.getDate();
                   //TODO: check if the signed day is at first/last position and style as standalone
 
-
-                  
                   return (
                     <Link
                       key={wIndex * 7 + dIndex}
@@ -97,11 +96,12 @@ export default function Client({
                       onClick={() => console.log(day)}
                       className={`day native ${
                         (signedGroup && !isActive)
-                          ? signedGroup.length > 1 ? "signed-" + getPosition(signedGroup, day.dayNumber!) : "signed"
+                          ? signedGroup.length > 1
+                            ? "signed-" +
+                              getPosition(signedGroup, day.dayNumber!)
+                            : "signed"
                           : ""
-                      } ${
-                        cn(isActive && "active")
-                      }${
+                      } ${cn(isActive && "active")}${
                         (
                             day.dayNumber > today.getDate()
                           )

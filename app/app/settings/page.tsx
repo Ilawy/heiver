@@ -38,6 +38,9 @@ export default async function Profile() {
             <ChevronRight />
         </div>
       </section>
+      <span className="w-fit" style={{
+        viewTransitionName: "vesta",
+      }}>Vesta</span>
     </main>
   );
 }
