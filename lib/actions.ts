@@ -152,7 +152,7 @@ export async function signup(_: unknown, fd: FormData): Promise<Result> {
 }
 
 export async function login(
-  // prev: unknown,
+  prev: unknown,
   fd: FormData,
 ): Promise<Result> {
   "use server";
@@ -211,6 +211,8 @@ export async function login(
       return redirect("/app");
     }
   } catch (e) {
+    console.log(e);
+    
     return {
       ok: false,
       //@ts-ignore

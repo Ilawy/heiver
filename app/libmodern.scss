@@ -39,31 +39,19 @@
 
 $blue: hex_hsl(#8b93ff);
 
-button:not(.native),
-.as-button {
+.button,
+[role=button] {
   padding: 0.5rem 2rem;
   border-radius: theme("borderRadius.xl");
   background: theme("colors.blue.500");
   color: white;
-  box-shadow: 3px 2px 6px 3px theme("colors.blue.200"),
-    0 0 0 2px theme("colors.blue.500"), 0 0 0 4px theme("colors.blue.200");
-  transition: box-shadow 325ms;
-
-  &:hover {
-    box-shadow: 3px 2px 4px 4px theme("colors.blue.200"),
-      0 0 0 4px theme("colors.blue.500"), 0 0 0 6px theme("colors.blue.200");
-  }
-
-  &:active {
-    box-shadow: 3px 2px 4px 4px theme("colors.blue.400"),
-      0 0 0 4px theme("colors.blue.400"), 0 0 0 6px theme("colors.blue.400") !important;
-  }
-
-  &.danger {
-    background: theme("colors.red.500");
-    box-shadow: 3px 2px 6px 3px theme("colors.red.200"),
-      0 0 0 2px theme("colors.red.500"), 0 0 0 4px theme("colors.red.200");
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  
+  background: #2dffc4;
+  color: black;
 }
 
 header {
