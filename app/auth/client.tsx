@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Key, User } from "react-feather";
-import { startViewTransition } from "@/lib/consts";
+import { startViewTransition } from "@/lib/utils";
 import { useLocalStorage } from "react-use";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";

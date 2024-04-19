@@ -1,6 +1,6 @@
 "use client";
 import { type getSession } from "@/lib/auth";
-import { cn, createCalendar, MAX_ALLOWED_PAST } from "@/lib/consts";
+import { cn, createCalendar } from "@/lib/utils";
 import { DayDate } from "@/lib/db/schema";
 import {
   AnimatePresence,
@@ -10,15 +10,28 @@ import {
 } from "framer-motion";
 import { Link } from "next-view-transitions";
 import { useEffect, useRef, useState } from "react";
+import { DateTime } from "luxon";
 
 interface Props {
   session: Awaited<ReturnType<typeof getSession>>;
   days: { day: number; average: number }[];
+  today: string;
 }
 
-export default function AuthedHomeClient({ session, days }: Props) {
+export default function AuthedHomeClient({ session, days, today }: Props) {
   const [show, setShow] = useState(false);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const todayDate = DateTime.fromISO(today);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (!(days.some((d) => d.day === todayDate.day && d.average > 0))) {
+        setShow(true);  
+      }
+    }, 1000);
+
+    return () => {};
+  }, []);
 
   return (
     <>
@@ -27,7 +40,7 @@ export default function AuthedHomeClient({ session, days }: Props) {
           key={"welcome"}
           id="welcome"
           layout
-          className="bg-yellow-200 p-4 rounded-2xl flex items-center justify-between col-span-2"
+          className="bg-[var(--color-a)] p-4 rounded-2xl flex items-center justify-between col-span-2"
         >
           <div>
             <h1 className="text-balance font-extrabold">
@@ -35,8 +48,13 @@ export default function AuthedHomeClient({ session, days }: Props) {
             </h1>
           </div>
           <div>
-            <div className="h-[48px] bg-[coral] aspect-square rounded-full">
-            </div>
+            <Link
+            
+            href="/profile">
+              <motion.div layoutId="profile-pic" style={{
+              viewTransitionName: "profile-pic",
+            }} className="inline-block h-[48px] bg-[var(--color-c)] aspect-square rounded-full"></motion.div>
+            </Link>
           </div>
         </motion.div>
 
@@ -46,12 +64,15 @@ export default function AuthedHomeClient({ session, days }: Props) {
           key={"daily"}
           id="daily"
           layout
-          className="col-span-2 row-span-3 bg-red-200 rounded-2xl p-3 grid grid-rows-4 grid-cols-3 gap-3"
+          className="col-span-2 row-span-2 bg-[var(--color-e)] rounded-2xl p-3 grid grid-rows-4 grid-cols-3 gap-3"
         >
-          <div className="flex items-center justify-center col-span-2">
-            <h1 className="text-balance font-extrabold">Daily Records</h1>
+          <div className="flex items-center justify-start col-span-2">
+            <h1 className="text-balance font-extrabold flex items-center">
+              Daily Records
+            </h1>
           </div>
-          <div className="col-span-full row-span-1 flex items-center justify-center">
+          {
+            /* <div className="col-span-full row-span-1 flex items-center justify-center">
             <div className="switch">
               <label>
                 Week
@@ -62,13 +83,13 @@ export default function AuthedHomeClient({ session, days }: Props) {
                 <input type="radio" name="daily_recs" id="" />
               </label>
             </div>
-          </div>
+          </div> */
+          }
           <div className="col-span-3 row-span-1 flex items-center gap-1">
             {days.map((day, i) => {
               return (
                 <motion.button
                   onClick={() => {
-                    setSelectedDay(day.day);
                   }}
                   key={i}
                   initial={{
@@ -90,7 +111,7 @@ export default function AuthedHomeClient({ session, days }: Props) {
                     delay: selectedDay ? 0 : 0.01 * i,
                   }}
                   style={{
-                    background: day.average === 0 ? "gray" : "coral",
+                    background: day.average === 0 ? "gray" : "var(--color-c)",
                     height: day.average === 0
                       ? `0.75rem`
                       : `${(day.average / 5) * 100}%`,
@@ -101,7 +122,7 @@ export default function AuthedHomeClient({ session, days }: Props) {
               );
             })}
           </div>
-          <div className="col-span-full flex items-center justify-center">
+          <div className="col-span-full row-span-2 flex items-center justify-center">
             <button
               onClick={() => setShow(!show)}
               className="button w-full ghost"

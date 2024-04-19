@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { IUsers, Tdays, Tusers } from "@/lib/db/schema";
 import { z } from "zod";
 import { and, eq, sql } from "drizzle-orm";
-import { cache2 } from "@/lib/consts";
+import { cache2 } from "@/lib/utils";
 import { DateTime } from "luxon";
 import { getTimeZone } from "./utils";
 import { redirect } from "next/navigation";
@@ -20,8 +20,6 @@ const getUserDaysOfMonth = cache2(async function getUserDaysOfMonth(
     sql`json_extract(${Tdays.date}, '$.month') = ${month}`,
     eq(Tdays.owner, userId),
   ));
-  console.log(days);
-
   return days;
 });
 
@@ -43,7 +41,7 @@ export default async function AuthedHome() {
 
   return (
     <main className="min-h-screen p-3 grid grid-rows-9 grid-cols-2 gap-3">
-      <Client days={days} session={session} />
+      <Client today={today.toString()} days={days} session={session} />
     </main>
   );
 }

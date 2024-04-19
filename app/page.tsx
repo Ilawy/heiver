@@ -1,5 +1,5 @@
 import { getSession } from "@/lib/auth";
-import { cache2 } from "@/lib/consts";
+import { cache2 } from "@/lib/utils";
 import { Link } from "next-view-transitions";
 import Image from "next/image";
 import AuthedHome from "./authedHome";

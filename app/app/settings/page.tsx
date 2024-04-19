@@ -1,7 +1,6 @@
 import { getSession } from "@/lib/auth";
 import { ChevronRight, Clock, Globe, User } from "react-feather";
-import EditName from "./edit_name";
-import { updateName, updateTimeZone } from "@/lib/actions";
+import {  updateTimeZone } from "@/lib/actions";
 import Tz from "./tz";
 
 export default async function Profile() {

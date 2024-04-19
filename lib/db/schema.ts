@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm'
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { createSelectSchema, jsonSchema } from 'drizzle-zod'
+import { createInsertSchema, createSelectSchema, jsonSchema } from 'drizzle-zod'
 
 
 
@@ -53,5 +53,6 @@ export const Idays = {
 }
 
 export const IUsers = {
-    select: createSelectSchema(Tusers)
+    select: createSelectSchema(Tusers),
+    insert: createInsertSchema(Tusers),
 }

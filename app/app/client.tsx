@@ -1,5 +1,5 @@
 "use client";
-import { cn, createCalendar, MAX_ALLOWED_PAST } from "@/lib/consts";
+import { cn, createCalendar } from "@/lib/utils";
 import { DayDate } from "@/lib/db/schema";
 import { motion } from "framer-motion";
 import { Link } from "next-view-transitions";

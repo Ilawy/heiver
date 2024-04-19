@@ -9,7 +9,7 @@ import { User } from "lucia";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
-import { cache2 } from "./consts";
+import { cache2 } from "@/lib/utils";
 import { z } from "zod";
 
 

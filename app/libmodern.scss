@@ -37,10 +37,15 @@
   @return $h * 360 $s * 100% $l * 100%;
 }
 
+
+
 $blue: hex_hsl(#8b93ff);
 
 .button,
 [role="button"] {
+  --disabled-bg: yellow;
+
+
   padding: 0.5rem 2rem;
   border-radius: theme("borderRadius.xl");
   // background: theme("colors.blue.500");
@@ -51,8 +56,16 @@ $blue: hex_hsl(#8b93ff);
   gap: 0.5rem;
 
   // background: #2dffc4;
-  color: black;
+  // color: black;
 
+  @supports (background: color-mix(in srgb, black, white)) {
+   --disabled-bg: color-mix(in srgb, currentColor 30%, gray 70%);
+  }
+
+  &:disabled{
+    background: var(--disabled-bg);
+    cursor: not-allowed;
+  }
 
   &.ghost{
     background: none;

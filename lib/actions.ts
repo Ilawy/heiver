@@ -1,6 +1,6 @@
 import { and, eq, or, sql } from "drizzle-orm";
 import { db } from "./db";
-import { Tdays, Tusers } from "./db/schema";
+import { IUsers, Tdays, Tusers } from "./db/schema";
 import { DateTime } from "luxon";
 import { cookies } from "next/headers";
 import { formData, json, numeric, text } from "zod-form-data";
@@ -15,7 +15,7 @@ import { RedisKV } from "./kv";
 import { env } from "./consts";
 import { createClient } from "redis";
 import { revalidatePath } from "next/cache";
-import { LoginActionPayload } from "./types";
+import { LoginActionPayload, UpdateUserActionPayload } from "./types";
 
 export type Result<T = any> = { ok: true; data: T } | { ok: false; error: string };
 
@@ -220,24 +220,27 @@ export async function login(
 }
 
 
-export async function updateName(fd: FormData) {
+export async function updateUser(data: object): Promise<Result> {
   "use server";
+  
   try {
-    const schema = z.string().min(3).max(255);
-    const output = schema.safeParse(fd.get("name"));
+    const output = UpdateUserActionPayload.safeParse(data);
     if (!output.success) {
       return {
         ok: false,
         error: `malformed payload ${output.error.message}`,
       };
     }
-    const newName = output.data;
     const session = await getSession();
     await db
       .update(Tusers)
-      .set({ name: newName })
+      .set(output.data)
       .where(eq(Tusers.id, session!.user!.id));
-    revalidatePath("/app/settings", "page");
+    revalidatePath("/settings", "page");
+    return {
+      ok: true,
+      data: null
+    }
   } catch (e) {
     return {
       ok: false,

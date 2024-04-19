@@ -1,4 +1,4 @@
-@import url('https://unpkg.com/css.gg@2.0.0/icons/css/key.css');
+@import url('https://unpkg.com/css.gg@2.0.0/icons/all.css');
 @import url('https://fonts.googleapis.com/css2?family=Jersey+10+Charted&family=Jersey+25&display=swap');
 @tailwind base;
 @tailwind components;
@@ -8,6 +8,22 @@
 :root{
   font-family: "Inter", sans-serif;
   scroll-padding: 0;
+}
+
+:root{
+  /* --color-a: #FFFEC4;
+  --color-b: #FFCF81;
+  --color-c: #FFB996;
+  --color-d: #D9EDBF;
+  --color-e: #B2C8DF; */
+
+  --color-a: #feca6c;
+  --color-b: #fe9a74;
+  --color-c: #e2ee8c;
+  --color-d: #02d2fc;
+  --color-e: #b2c8df;
+
+  --c-primary: var(--color-c);
 }
 
 
