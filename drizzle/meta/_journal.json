@@ -50,6 +50,20 @@
       "when": 1712577886483,
       "tag": "0006_flowery_pride",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1713530808341,
+      "tag": "0007_clear_shinko_yamashiro",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1713531461640,
+      "tag": "0008_curious_black_knight",
+      "breakpoints": true
     }
   ]
 }

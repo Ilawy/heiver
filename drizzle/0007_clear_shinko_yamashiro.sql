@@ -1,0 +1,1 @@
+ALTER TABLE days ADD `average` integer NOT NULL;

@@ -28,6 +28,7 @@ export const Tdays = sqliteTable('days', {
     religion: integer('religion').notNull(),
     life: integer('life').notNull(),
     health: integer('health').notNull(),
+    average: integer('average').notNull().default(-1),
     owner: text('owner').notNull().references(()=>Tusers.id),
     addedAt: integer('added_at', {
         mode: 'timestamp'
