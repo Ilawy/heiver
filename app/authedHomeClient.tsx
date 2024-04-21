@@ -11,6 +11,7 @@ import {
 import { Link } from "next-view-transitions";
 import { useEffect, useRef, useState } from "react";
 import { DateTime } from "luxon";
+import Header from "@/lib/components/header";
 
 interface Props {
   session: Awaited<ReturnType<typeof getSession>>;
@@ -26,7 +27,7 @@ export default function AuthedHomeClient({ session, days, today }: Props) {
   useEffect(() => {
     setTimeout(() => {
       if (!(days.some((d) => d.day === todayDate.day && d.average > 0))) {
-        setShow(true);  
+        setShow(true);
       }
     }, 1000);
 
@@ -36,27 +37,35 @@ export default function AuthedHomeClient({ session, days, today }: Props) {
   return (
     <>
       <AnimatePresence>
-        <motion.div
+        {
+          /* <motion.div
           key={"welcome"}
           id="welcome"
           layout
           className="bg-[var(--color-a)] p-4 rounded-2xl flex items-center justify-between col-span-2"
         >
+
+        </motion.div> */
+        }
+        <Header className="flex items-center justify-between col-span-2">
           <div>
             <h1 className="text-balance font-extrabold">
               Welcome back, {session?.user?.name}
             </h1>
           </div>
           <div>
-            <Link
-            
-            href="/profile">
-              <motion.div layoutId="profile-pic" style={{
-              viewTransitionName: "profile-pic",
-            }} className="inline-block h-[48px] bg-[var(--color-c)] aspect-square rounded-full"></motion.div>
+            <Link href="/profile">
+              <motion.div
+                layoutId="profile-pic"
+                style={{
+                  viewTransitionName: "profile-pic",
+                }}
+                className="inline-block h-[48px] bg-[var(--color-c)] aspect-square rounded-full"
+              >
+              </motion.div>
             </Link>
           </div>
-        </motion.div>
+        </Header>
 
         {show && <ReminderBlock key={"reminder"} />}
 
@@ -65,6 +74,9 @@ export default function AuthedHomeClient({ session, days, today }: Props) {
           id="daily"
           layout
           className="col-span-2 row-span-2 bg-[var(--color-e)] rounded-2xl p-3 grid grid-rows-4 grid-cols-3 gap-3"
+          style={{
+            viewTransitionName: "block-daily",
+          }}
         >
           <div className="flex items-center justify-start col-span-2">
             <h1 className="text-balance font-extrabold flex items-center">
@@ -123,12 +135,13 @@ export default function AuthedHomeClient({ session, days, today }: Props) {
             })}
           </div>
           <div className="col-span-full row-span-2 flex items-center justify-center">
-            <button
+            <Link
+              href={"/c"}
               onClick={() => setShow(!show)}
               className="button w-full ghost"
             >
               View
-            </button>
+            </Link>
           </div>
         </motion.div>
       </AnimatePresence>
