@@ -1,4 +1,4 @@
-import {Link} from "next-view-transitions";
+import {Link} from "@/lib/hash";
 
 import { db } from "@/lib/db";
 import { cookies } from "next/headers";

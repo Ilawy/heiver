@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter,  } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import "./libmodern.scss";
 import Script from "next/script";
 import UI from "./ui";
-import {Link, ViewTransitions} from "next-view-transitions";
-import NextTopLoader from 'nextjs-toploader';
-
+import { Link } from "@/lib/hash";
+import NextTopLoader from "nextjs-toploader";
+import { ViewTransitions } from "next-view-transitions";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -25,12 +25,14 @@ export default function RootLayout({
       <html lang="en">
         <body className={"max-w-xl mx-auto"}>
           <NextTopLoader />
-          {/* <header>
+          {
+            /* <header>
             <Link href={"/app"}>RLH</Link>
             <div>
               <Link href={"/app/settings"}>Settings</Link>
             </div>
-          </header>  */}
+          </header>  */
+          }
           <UI>
             {children}
           </UI>

@@ -8,7 +8,7 @@ import {
   motion,
   useIsPresent,
 } from "framer-motion";
-import { Link } from "next-view-transitions";
+import { Link } from "@/lib/hash";
 import { useEffect, useRef, useState } from "react";
 import { DateTime } from "luxon";
 import Header from "@/lib/components/header";

@@ -2,7 +2,7 @@
 import { cn, createCalendar } from "@/lib/utils";
 import { DayDate } from "@/lib/db/schema";
 import { motion } from "framer-motion";
-import { Link } from "next-view-transitions";
+import { Link } from "@/lib/hash";
 
 function groupBySequence(arr: number[]) {
   if (arr.length === 0) return [];

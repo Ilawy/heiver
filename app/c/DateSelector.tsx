@@ -33,6 +33,11 @@ export default function DateSelector(
         className="date-picker-dialog flex flex-col gap-1"
       >
         <h1>Pick a date</h1>
+        <button onClick={()=>{
+            const today = new Date();
+            setDate([today.getMonth() + 1, today.getFullYear()]);
+            setSelecting(false);
+        }} className="bg-[var(--color-a)] text-[var(--text-color)] rounded-2xl p-3">Jump to today</button>
         <div className="flex flex-col gap-3">
           <label>
             Month
@@ -62,7 +67,7 @@ export function DateDisplay(
     <motion.button
       layoutId="date-selector"
       onClick={() => setSelecting(true)}
-      className="bg-[var(--color-c)] text-[var(--text-color)] rounded-2xl p-3 flex items-center justify-center text-xl font-bold gap-3 sticky top-3"
+      className="bg-[var(--color-c)] text-[var(--text-color)] rounded-2xl p-3 flex items-center justify-center text-xl font-bold gap-3 sticky top-3 z-50"
     >
       <h3>{month}</h3>
       {"/"}

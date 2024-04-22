@@ -2,7 +2,7 @@ import { getSession } from "@/lib/auth";
 import ProfileSection from "./profileSection";
 import { updateUser } from "@/lib/actions";
 import { ChevronLeft } from "react-feather";
-import { Link } from "next-view-transitions";
+import { Link } from "@/lib/hash";
 
 export default async function ProfilePage() {
   const session = (await getSession())!;
