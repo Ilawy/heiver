@@ -1,15 +1,12 @@
 import { sql } from 'drizzle-orm'
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { createInsertSchema, createSelectSchema, jsonSchema } from 'drizzle-zod'
+import { z } from 'zod'
+import { DayDate } from '../types'
 
 
 
 
-export type DayDate = {
-    year: number
-    month: number
-    day: number
-}
 
 export const Tusers = sqliteTable('users', {
     id: text('id').primaryKey().notNull(),
@@ -22,9 +19,7 @@ export const Tusers = sqliteTable('users', {
 
 export const Tdays = sqliteTable('days', {
     id: integer('id').primaryKey().notNull(),
-    date: text('date', {
-        mode: "json"
-    }).notNull().$type<DayDate>(),
+    date: text("date").notNull(),
     religion: integer('religion').notNull(),
     life: integer('life').notNull(),
     health: integer('health').notNull(),

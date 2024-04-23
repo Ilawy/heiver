@@ -79,7 +79,7 @@ export default function Client(
                   >
                     <span className="flex items-center justify-center gap-3 flex-wrap">
                       <motion.span
-                        layoutId={`day-${key}`}
+                        layoutId={`day_number-${key}`}
                         className="bg-gray-600 text-white px-2 py-1 rounded-2xl w-[3ch] h-[3ch] flex items-center justify-center"
                       >
                         {day.dayNumber}

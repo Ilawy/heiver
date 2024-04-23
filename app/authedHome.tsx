@@ -8,6 +8,7 @@ import { cache2 } from "@/lib/utils";
 import { DateTime } from "luxon";
 import { getTimeZone } from "./utils";
 import { redirect } from "next/navigation";
+import { parseDate } from "@/lib/types";
 
 const getUserDaysOfMonth = cache2(async function getUserDaysOfMonth(
   userId: z.infer<typeof IUsers.select>["id"],
@@ -33,9 +34,10 @@ export default async function AuthedHome() {
     (_, i) => i + 1,
   );
   const days = passedDaysTillToday.map((day) => {
+   
     return {
       day,
-      average: signedDays.find((d) => d.date.day === day)?.average || Math.floor(Math.random() * 5),
+      average: signedDays.find((d) => parseDate(d.date!).day === day)?.average || Math.floor(Math.random() * 5),
     };
   });
 

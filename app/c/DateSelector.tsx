@@ -39,14 +39,14 @@ export default function DateSelector(
             setSelecting(false);
         }} className="bg-[var(--color-a)] text-[var(--text-color)] rounded-2xl p-3">Jump to today</button>
         <div className="flex flex-col gap-3">
-          <label>
+          <div>
             Month
             <Stepper min={1} max={12} value={newM} setValue={setNewM} />
-          </label>
-          <label>
+          </div>
+          <div>
             Year
             <Stepper min={1900} max={2100} value={newY} setValue={setNewY} />
-          </label>
+          </div>
         </div>
         <button onClick={() => {
           setDate([newM, newY]);

@@ -1,7 +1,6 @@
 "use client";
 import { type getSession } from "@/lib/auth";
 import { cn, createCalendar } from "@/lib/utils";
-import { DayDate } from "@/lib/db/schema";
 import {
   AnimatePresence,
   LayoutGroup,

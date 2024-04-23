@@ -15,9 +15,16 @@ import { RedisKV } from "./kv";
 import { env } from "./consts";
 import { createClient } from "redis";
 import { revalidatePath } from "next/cache";
-import { LoginActionPayload, UpdateUserActionPayload } from "./types";
+import {
+  AddDayDataActionPayload,
+  LoginActionPayload,
+  UpdateUserActionPayload,
+} from "./types";
 
-export type Result<T = any> = { ok: true; data: T } | { ok: false; error: string };
+export type Result<T = any> = { ok: true; data: T } | {
+  ok: false;
+  error: string;
+};
 
 export async function getMonthAVG(
   userId: string,
@@ -59,57 +66,6 @@ export async function getMonthAVG(
   }
 }
 
-export async function submitDayData(
-  _: unknown,
-  fd: FormData,
-): Promise<Result> {
-  "use server";
-  try {
-    const session = await getSession();
-    //TODO: check if this is necessary
-    if (!session) throw new Error("no session found");
-    if (fd.get("note") === "") fd.delete("note");
-    const schema = formData({
-      religion: numeric(),
-      life: numeric(),
-      health: numeric(),
-      date: json(
-        z.object({ year: numeric(), month: numeric(), day: numeric() }),
-      ),
-      note: text().optional(),
-    });
-    const output = schema.safeParse(fd);
-    if (!output.success) {
-      console.log(output.error);
-
-      return {
-        ok: false,
-        error: structuredClone(output.error.message),
-      };
-    } else {
-      const result = await db.insert(Tdays).values({
-        date: output.data.date,
-        owner: session.user.id,
-        religion: output.data.religion,
-        life: output.data.life,
-        health: output.data.health,
-        note: output.data.note,
-      });
-      console.log(result);
-
-      return {
-        ok: true,
-        data: null,
-      };
-    }
-  } catch (e) {
-    console.log(e);
-    return {
-      ok: false,
-      error: `${e}`,
-    };
-  }
-}
 
 export async function signup(_: unknown, fd: FormData): Promise<Result> {
   "use server";
@@ -158,8 +114,6 @@ export async function login(
 ): Promise<Result<true>> {
   "use server";
   try {
-    
-
     const output = LoginActionPayload.safeParse(fd);
     if (!output.success) {
       return {
@@ -209,8 +163,8 @@ export async function login(
       return redirect("/");
     }
   } catch (e) {
-    if(e instanceof Error && e.message === "NEXT_REDIRECT")throw e
-    
+    if (e instanceof Error && e.message === "NEXT_REDIRECT") throw e;
+
     return {
       ok: false,
       //@ts-ignore
@@ -219,10 +173,9 @@ export async function login(
   }
 }
 
-
 export async function updateUser(data: object): Promise<Result> {
   "use server";
-  
+
   try {
     const output = UpdateUserActionPayload.safeParse(data);
     if (!output.success) {
@@ -239,8 +192,8 @@ export async function updateUser(data: object): Promise<Result> {
     revalidatePath("/settings", "page");
     return {
       ok: true,
-      data: null
-    }
+      data: null,
+    };
   } catch (e) {
     return {
       ok: false,
@@ -305,6 +258,39 @@ export async function deleteDay(fd: FormData) {
     return {
       ok: true,
       data: true,
+    };
+  } catch (e) {
+    return {
+      ok: false,
+      error: `${e}`,
+    };
+  }
+}
+
+export async function addDayData(
+  data: z.infer<typeof AddDayDataActionPayload>,
+): Promise<Result> {
+  "use server";
+  try {
+    console.log("INSERT", data);
+
+    const session = await getSession();
+    const result = await db
+      .insert(Tdays)
+      .values({
+        date: data.date,
+        religion: data.religion,
+        life: data.life,
+        health: data.health,
+        owner: session!.user!.id,
+      })
+      .returning();
+    revalidatePath("/c/[day]", "page");
+    console.log("INSERT DONE", result);
+
+    return {
+      ok: true,
+      data: result[0],
     };
   } catch (e) {
     return {

@@ -42,10 +42,11 @@ $blue: hex_hsl(#8b93ff);
 .button,
 [role="button"] {
   --disabled-bg: yellow;
+  --current-bg: var(--color-b);
 
   padding: 0.5rem 2rem;
   border-radius: theme("borderRadius.xl");
-  // background: theme("colors.blue.500");
+  background: var(--current-bg);
   color: white;
   display: flex;
   justify-content: center;
@@ -553,7 +554,6 @@ h2:not(.native) {
   top: 9px;
 }
 
-
 .date-picker-backdrop {
   position: fixed;
   z-index: 90;
@@ -575,3 +575,32 @@ h2:not(.native) {
   border-radius: theme("borderRadius.2xl");
   min-width: 20rem;
 }
+
+.container {
+  width: 200px;
+  height: 100px;
+  background: #eee;
+  border-radius: 40px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.scroller {
+  width: 600px;
+  height: 100px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  scroll-snap-type: x mandatory;
+  gap: 3px;
+
+  .item {
+    width: 600px;
+    font-size: xx-large;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // height: 100px;
+  }
+}
+
