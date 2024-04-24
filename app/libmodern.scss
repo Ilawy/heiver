@@ -604,3 +604,53 @@ h2:not(.native) {
   }
 }
 
+.ranger-tip {
+  position: fixed;
+  // background: rgba(0, 0, 0, 0.5);
+  // backdrop-filter: blur(8px);
+  // border-radius: 1rem;
+  // padding: 1rem;
+  width: 100px;
+  height: 100px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);  border-radius: 60px 60px 0px 60px;
+  rotate: 45deg;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .content{
+    rotate: -45deg;
+  }
+}
+
+.ranger {
+  background: var(--color-b);
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  width: 200px;
+  height: 0.75rem;
+  border-radius: 99e9px;
+
+  .track {
+    position: relative;
+    flex-grow: 1;
+    border-radius: 999e9px;
+    height: 3px;
+  }
+
+  .thumb {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: white;
+    border: 3px solid var(--color-b);
+    border-radius: 999e9px;
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    cursor: grab;
+  }
+}
