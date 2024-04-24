@@ -10,7 +10,7 @@ import {
 import { Link } from "@/lib/hash";
 import { useEffect, useRef, useState } from "react";
 import { DateTime } from "luxon";
-import Header from "@/lib/components/header";
+import Header, { PP } from "@/lib/components/header";
 
 interface Props {
   session: Awaited<ReturnType<typeof getSession>>;
@@ -53,16 +53,7 @@ export default function AuthedHomeClient({ session, days, today }: Props) {
             </h1>
           </div>
           <div>
-            <Link href="/profile">
-              <motion.div
-                layoutId="profile-pic"
-                style={{
-                  viewTransitionName: "profile-pic",
-                }}
-                className="inline-block h-[48px] bg-[var(--color-c)] aspect-square rounded-full"
-              >
-              </motion.div>
-            </Link>
+           <PP />
           </div>
         </Header>
 

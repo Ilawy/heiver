@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.1.1",
+    "@floating-ui/dom": "^1.6.3",
     "@ilawy/eslint-plugin-await-catch": "npm:@jsr/ilawy__eslint-plugin-await-catch@^1.0.1",
     "@libsql/client": "^0.6.0",
     "@lucia-auth/adapter-drizzle": "^1.0.7",
+    "@radix-ui/react-slider": "^1.1.2",
     "@types/lodash": "^4.17.0",
     "@types/luxon": "^3.4.2",
     "drizzle-orm": "^0.30.6",

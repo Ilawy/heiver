@@ -32,7 +32,7 @@ export const AddDayDataActionPayload = formData({
 
 
 export const parseDate = (d: string) => {
-  const result =  /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(d);
+  const result =  /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(d);  
   if(!result)throw new Error("invalid date");
   const [_, day, month, year] = result;
   return {
