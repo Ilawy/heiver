@@ -30,17 +30,17 @@ export default async function cDayPage({ params: { day: dayKey } }: any) {
   const tz = await getTimeZone(session!.user!, redirect);
   const dayData = await getDay(dayKey, session!.user!.id);
   if (dayData) return <Display day={dayData} />;
-  const today = DateTime.now().setZone(tz).set({
+  const today = DateTime.now().set({
     hour: 0,
     minute: 0,
     second: 0,
     millisecond: 0,
-  });
+  }).setZone(tz);
   const thatDay = DateTime.fromObject({
     year,
     month,
     day
-  })
+  }).setZone(tz);
   const diff = thatDay.diff(today, ["days"]).days
   if(diff === 0 || diff === -1){
     return <Create dayKey={dayKey} />
