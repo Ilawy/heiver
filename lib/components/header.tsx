@@ -22,7 +22,7 @@ export default function Header(
         viewTransitionName: "block-header",
         ...style,
       }}
-      className={`bg-[var(--color-a)] p-4 rounded-3xl ${className}`}
+      className={`bg-[var(--color-a)] p-4 rounded-2xl ${className}`}
       {...props}
     >
       {children}

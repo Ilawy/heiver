@@ -99,7 +99,6 @@ function LevelToImage({ level }: { level: number }) {
     style: {
       width: 48,
       height: 48,
-      background: "red"
     }
   }
   if (level === 1) {

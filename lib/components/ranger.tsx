@@ -132,8 +132,8 @@ const Ranger = forwardRef<
         {...props}
         onTouchStart={() => setIsDragging(true)}
         onTouchEnd={() => setIsDragging(false)}
-        onMouseDown={() => setIsDragging(true)}
-        onMouseUp={() => setIsDragging(false)}
+        onPointerDown={() => setIsDragging(true)}
+        onPointerUp={() => setIsDragging(false)}
       >
         <Slider.Track className="track bg-blackA7 relative grow rounded-full h-[3px] bg-yellow-200">
           <Slider.Range className="absolute  rounded-full h-full bg-purple-200" />
