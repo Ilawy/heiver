@@ -1,11 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
 
 const getAbsValue = (number: number) => Math.ceil(number / 20);
-
-
 
 import level_1_src from "@/public/level_1.png";
 import level_2_src from "@/public/level_2.png";
@@ -23,8 +21,12 @@ const levelToSrc = {
   5: level_5_src,
 };
 
-export default function Ranger(
-  props: React.ComponentProps<typeof Slider.Root>,
+const Ranger = forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<typeof Slider.Root>
+>(function Ranger(
+  {onValueChange, ...props}: React.ComponentProps<typeof Slider.Root>,
+  ref
 ) {
   const range = useRef<HTMLSpanElement>(null);
   const tip = useRef<HTMLSpanElement>(null);
@@ -63,8 +65,7 @@ export default function Ranger(
       filter: "blur(6px)",
       opacity: 0,
     },
-    transition: {
-    },
+    transition: {},
   };
 
   return (
@@ -80,7 +81,6 @@ export default function Ranger(
           animate={{
             opacity: isDragging ? 1 : 0,
             scale: isDragging ? 1 : 0,
-            
           }}
           transition={{
             damping: 10,
@@ -121,26 +121,31 @@ export default function Ranger(
         max={100}
         min={0}
         step={1}
-        {...props}
+        
         onValueChange={async (ranges) => {
           const value = ranges[0];
-          setCurrentValue(Math.max(getAbsValue(value), 1));
+          const absValue = Math.max(getAbsValue(value), 1);
+          setCurrentValue(absValue);
           setDragTrigger(!dragTrigger);
+          onValueChange?.([absValue])
         }}
+        {...props}
+        onTouchStart={() => setIsDragging(true)}
+        onTouchEnd={() => setIsDragging(false)}
+        onMouseDown={() => setIsDragging(true)}
+        onMouseUp={() => setIsDragging(false)}
       >
         <Slider.Track className="track bg-blackA7 relative grow rounded-full h-[3px] bg-yellow-200">
           <Slider.Range className="absolute  rounded-full h-full bg-purple-200" />
         </Slider.Track>
         <Slider.Thumb
           ref={range}
-          onTouchStart={() => setIsDragging(true)}
-          onTouchEnd={() => setIsDragging(false)}
-          onMouseDown={() => setIsDragging(true)}
-          onMouseUp={() => setIsDragging(false)}
           className="thumb"
           aria-label="Volume"
         />
       </Slider.Root>
     </>
   );
-}
+});
+
+export default Ranger

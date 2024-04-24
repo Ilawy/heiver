@@ -1,9 +1,13 @@
 "use client"
-import React from "react";
+import React, { forwardRef } from "react";
 import { motion } from "framer-motion";
 
-export default function MotionDiv(
-  { ...props }: React.ComponentProps<typeof motion.div>,
+const MotionDiv = forwardRef<HTMLDivElement, React.ComponentProps<typeof motion.div>>(function MotionDiv(
+  { ...props },
+  ref
 ) {
-  return <motion.div {...props} />;
-}
+  return <motion.div ref={ref} {...props} />;
+})
+
+
+export default MotionDiv
