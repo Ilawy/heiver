@@ -4,7 +4,7 @@ import { parseDate } from "@/lib/types";
 import Header, { PP } from "@/lib/components/header";
 import Ranger from "@/lib/components/ranger";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 
 import level_1_src from "@/public/level_1.png";
 import level_2_src from "@/public/level_2.png";
@@ -81,59 +81,64 @@ export default function Create({ dayKey }: { dayKey: string }) {
   );
 }
 
-function LevelToImage({ level }: { level: number }) {
-  const props: React.ComponentProps<typeof motion.img> = {
+function LevelToImage({ level }: { level: 1 | 2 | 3 | 4 | 5 }) {
+  const lts = (l: number) => Math.max(l * 6, 12);
+  const id = "_"; //Math.random().toString(16).slice(3, 5);
+
+  const levelToSouce = (l: 1 | 2 | 3 | 4 | 5) =>
+    l === 1
+      ? level_1_src
+      : l === 2
+      ? level_2_src
+      : l === 3
+      ? level_3_src
+      : l === 4
+      ? level_4_src
+      : level_5_src;
+
+  const props = (l: number): React.ComponentProps<typeof motion.img> =>({
     width: 48,
     height: 48,
     style: {
-      display: "inline-block",
+      display: "flex",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: -1,
     },
     initial: {
-      filter: "blur(6px)",
+      filter: "blur(6px) drop-shadow(0 0 6px #ffbb4d)",
     },
     animate: {
-      filter: "drop-shadow(0 0 12px #ffbb4d)",
+      // filter: `drop-shadow(0 0 ${lts(level)}px #ffbb4d)`,
+      filter: "blur(0px) drop-shadow(0 0 6px #ffbb4d)",
+      opacity: l === level ? 1 : 0,
     },
-  };
-  const wrapperProps = {
+    exit: {
+      filter: "blur(6px) drop-shadow(0 0 6px #ffbb4d)",
+      position: "absolute",
+    },
+  });
+  const wrapperProps: React.ComponentProps<typeof motion.div> = {
     style: {
       width: 48,
       height: 48,
-    }
-  }
-  if (level === 1) {
-    return (
-      <motion.div {...wrapperProps}>
-        <motion.img {...props} src={level_1_src.src} />
-      </motion.div>
-    );
-  }
-  if (level === 2) {
-    return (
-      <motion.div {...wrapperProps}>
-        <motion.img {...props} src={level_2_src.src} />
-      </motion.div>
-    );
-  }
-  if (level === 3) {
-    return (
-      <motion.div {...wrapperProps}>
-        <motion.img {...props} src={level_3_src.src} />
-      </motion.div>
-    );
-  }
-  if (level === 4) {
-    return (
-      <motion.div {...wrapperProps}>
-        <motion.img {...props} src={level_4_src.src} />
-      </motion.div>
-    );
-  }
-  if (level === 5) {
-    return (
-      <motion.div {...wrapperProps}>
-        <motion.img {...props} src={level_5_src.src} />
-      </motion.div>
-    );
-  }
+      position: "relative",
+    },
+  };
+  return (
+    <motion.div {...wrapperProps}>
+      <AnimatePresence>
+        {[1, 2, 3, 4, 5].map((l) => (
+          <motion.img
+            key={`${id}${l}`}
+            {...props(l)}
+            src={levelToSouce(level).src}
+          />
+        ))}
+      </AnimatePresence>
+    </motion.div>
+  );
 }
