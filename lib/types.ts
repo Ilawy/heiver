@@ -4,7 +4,7 @@ import { IUsers } from "./db/schema";
 
 export const DayDate = z.string().regex(/^\d{1,2}-\d{1,2}-\d{4}$/);
 
-export const LoginActionPayload = formData({
+export const LoginActionPayload = z.object({
   usernameOrEmail: z.string().min(3).max(32),
   password: z.string().min(8).max(255),
 });

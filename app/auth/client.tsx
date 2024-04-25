@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Key, User } from "react-feather";
 import { startViewTransition } from "@/lib/utils";
-import { useLocalStorage } from "react-use";
+import { useAsyncFn, useLocalStorage } from "react-use";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 
@@ -19,16 +19,38 @@ interface Props {
 
 interface LoginProps {
   login: typeof _login;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
 }
-
 
 export default function Client(props: Props) {
   const [tab, setTab] = useState<"login" | "signup">(
     // "auth_tab",
     "login",
   );
+  const [loading, setLoading] = useState(false);
   return (
     <>
+      <AnimatePresence>
+        {loading && (
+          <motion.div
+            style={{
+              backdropFilter: "blur(4px)",
+            }}
+            className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-40"
+          >
+            <motion.div layoutId="button-loading" 
+            style={{
+              translate: "-50% -50%",
+            }}
+            className="absolute z-50 left-1/2 top-1/2 p-3 rounded-2xl bg-[var(--color-a)] w-full max-w-xs h-32 flex items-center justify-center flex-col gap-3">
+              <h1>Loading</h1>
+              <span className="gg-spinner"></span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="tabs">
         <motion.button
           onClick={() => startViewTransition(() => setTab("login"))}
@@ -49,41 +71,46 @@ export default function Client(props: Props) {
         </motion.button>
       </div>
 
-      {tab === "login" ? <Login login={props.login} /> : <Signup />}
+      {tab === "login"
+        ? (
+          <Login
+            loading={loading}
+            setLoading={setLoading}
+            login={props.login}
+          />
+        )
+        : <Signup setLoading={setLoading} />}
     </>
   );
 }
 
 function Login(props: LoginProps) {
-  const [state, loginAction] = useFormState(props.login, null);
-  const [loading, setLoading] = useState(false);
+  // const [{ loading, error, value }, loginAction] = useAsyncFn(props.login)
   const { register, handleSubmit, formState: { errors } } = useForm<
     z.infer<typeof LoginActionPayload>
   >();
   useEffect(() => {
-    console.log(state, loading);
-    
-    
     return () => {};
-  }, [state, loading]);
+  }, []);
   return (
     <div className="flex-1 flex flex-col justify-between">
       <div>
         <motion.h1 layoutId="title">Login</motion.h1>
-        {loading && "..."}
         <form
           className="flex flex-col gap-3"
-          onSubmit={handleSubmit((_, event) => {
-            try{
-                setLoading(true);
-                const fd = new FormData(event!.target);
-                loginAction(fd);
-            }finally{
-                setLoading(false);
+          onSubmit={handleSubmit((data, event) => {
+            try {
+              props.setLoading(true);
+              props.login(data).then((e) => {
+                console.log(e);
+                props.setLoading(false);
+              });
+             
+            } finally {
+              // setLoading(false);
             }
           })}
         >
-          <FormWaiter setLoading={setLoading} />
           <div className="rounded-xl border p-3 flex flex-col gap-1">
             <label className="flex gap-3 items-center p-1">
               <div className="bg-[#ACFADF] w-12 h-12 aspect-square flex items-center justify-center rounded-full">
@@ -99,7 +126,9 @@ function Login(props: LoginProps) {
                 type="text"
               />
             </label>
-            {!!errors.usernameOrEmail && errors.usernameOrEmail.type === "required" && ("Username is required")}
+            {!!errors.usernameOrEmail &&
+              errors.usernameOrEmail.type === "required" &&
+              ("Username is required")}
             <hr />
             <label className="flex gap-3 items-center p-1">
               <div className="bg-[#ACFADF] w-12 h-12 aspect-square flex items-center justify-center rounded-full">
@@ -115,11 +144,11 @@ function Login(props: LoginProps) {
                 })}
               />
             </label>
-            {!!errors.password && errors.password.type === "required" && ("Password is required")}
-
+            {!!errors.password && errors.password.type === "required" &&
+              ("Password is required")}
           </div>
           <div className="flex items-center justify-between gap-3">
-            <button className="button flex-1">Login</button>
+            {!props.loading && <motion.button layoutId="button-loading" className="button flex-1">Login</motion.button>}
           </div>
         </form>
         <button className="my-3 underline">Recover your account</button>
@@ -131,7 +160,7 @@ function Login(props: LoginProps) {
     </div>
   );
 }
-function Signup() {
+function Signup({ setLoading }: { setLoading: (loading: boolean) => void }) {
   return (
     <div>
       <br />

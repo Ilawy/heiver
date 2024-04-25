@@ -108,13 +108,10 @@ export async function signup(_: unknown, fd: FormData): Promise<Result> {
   }
 }
 
-export async function login(
-  prev: unknown,
-  fd: FormData,
-): Promise<Result<true>> {
+export async function login(payload: z.infer<typeof LoginActionPayload>): Promise<Result<true>> {
   "use server";
   try {
-    const output = LoginActionPayload.safeParse(fd);
+    const output = LoginActionPayload.safeParse(payload);
     if (!output.success) {
       return {
         ok: false,
