@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   const result = await getSession(request.cookies.get(lucia.sessionCookieName))
   if(!result){
     request.cookies.delete(lucia.sessionCookieName)
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/auth', request.url))
   }
   // return NextResponse.redirect(new URL('/home', request.url))
   return NextResponse.next()
@@ -16,5 +16,5 @@ export async function middleware(request: NextRequest) {
  
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: '/app/:path*',
+  matcher: ['/c/:day*', '/profile/:any*'],
 }

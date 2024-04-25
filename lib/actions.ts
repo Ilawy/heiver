@@ -173,6 +173,15 @@ export async function login(
   }
 }
 
+
+export async function logout(fd: FormData){
+  "use server";
+  const redirectTo = fd.get("redirectTo")?.toString() || "/";
+  const c = cookies()
+  c.delete(lucia.sessionCookieName)
+  return redirect(redirectTo)
+}
+
 export async function updateUser(data: object): Promise<Result> {
   "use server";
 

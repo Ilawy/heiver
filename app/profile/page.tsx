@@ -1,6 +1,6 @@
 import { getSession } from "@/lib/auth";
 import ProfileSection from "./profileSection";
-import { updateUser } from "@/lib/actions";
+import { logout, updateUser } from "@/lib/actions";
 import { PP } from "@/lib/components/header";
 import Goback from "./goback";
 
@@ -15,6 +15,12 @@ export default async function ProfilePage() {
         </div>
         <Goback />
         <ProfileSection updateUser={updateUser} user={session.user} />
+        <section>
+          <form action={logout}>
+            <input type="text" hidden readOnly value={"/"} name="redirectTo" />
+            <button className="button">Logout</button>
+          </form>
+        </section>
       </div>
     </>
   );
