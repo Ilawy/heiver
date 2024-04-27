@@ -21,7 +21,7 @@ declare module "react" {
 }
 
 
-export const AddDayDataActionPayload = formData({
+export const CreateDayActionPayload = formData({
   date: DayDate,
   religion: z.number().min(1).max(5),
   life: z.number().min(1).max(5),

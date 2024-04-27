@@ -11,6 +11,7 @@ import { DateTime } from "luxon";
 import { redirect } from "next/navigation";
 import { getTimeZone } from "@/app/utils";
 import Create from "./create";
+import { createDay } from "@/lib/actions";
 
 const getDay = cache2(async (date: string, owner: string) => {
   const result = await db.select().from(Tdays).where(and(
@@ -43,7 +44,7 @@ export default async function cDayPage({ params: { day: dayKey } }: any) {
   }).setZone(tz);
   const diff = thatDay.diff(today, ["days"]).days
   if(diff === 0 || diff === -1){
-    return <Create dayKey={dayKey} />
+    return <Create createDay={createDay} dayKey={dayKey} />
   }
   
 

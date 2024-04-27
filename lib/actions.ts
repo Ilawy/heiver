@@ -16,7 +16,7 @@ import { env } from "./consts";
 import { createClient } from "redis";
 import { revalidatePath } from "next/cache";
 import {
-  AddDayDataActionPayload,
+  CreateDayActionPayload,
   LoginActionPayload,
   UpdateUserActionPayload,
 } from "./types";
@@ -273,8 +273,8 @@ export async function deleteDay(fd: FormData) {
   }
 }
 
-export async function addDayData(
-  data: z.infer<typeof AddDayDataActionPayload>,
+export async function createDay(
+  data: z.infer<typeof CreateDayActionPayload>,
 ): Promise<Result> {
   "use server";
   try {

@@ -39,11 +39,13 @@ export default function Client(props: Props) {
             }}
             className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] z-40"
           >
-            <motion.div layoutId="button-loading" 
-            style={{
-              translate: "-50% -50%",
-            }}
-            className="absolute z-50 left-1/2 top-1/2 p-3 rounded-2xl bg-[var(--color-a)] w-full max-w-xs h-32 flex items-center justify-center flex-col gap-3">
+            <motion.div
+              layoutId="button-loading"
+              style={{
+                translate: "-50% -50%",
+              }}
+              className="absolute z-50 left-1/2 top-1/2 p-3 rounded-2xl bg-[var(--color-a)] w-full max-w-xs h-32 flex items-center justify-center flex-col gap-3"
+            >
               <h1>Loading</h1>
               <span className="gg-spinner"></span>
             </motion.div>
@@ -102,11 +104,12 @@ function Login(props: LoginProps) {
             try {
               props.setLoading(true);
               props.login(data).then((e) => {
-                console.log(e);
-                props.setLoading(false);
+                if (e) {
+                  if (!e.ok) alert(e.error);
+                }
               });
-             
             } finally {
+              props.setLoading(false);
               // setLoading(false);
             }
           })}
@@ -148,7 +151,14 @@ function Login(props: LoginProps) {
               ("Password is required")}
           </div>
           <div className="flex items-center justify-between gap-3">
-            {!props.loading && <motion.button layoutId="button-loading" className="button flex-1">Login</motion.button>}
+            {!props.loading && (
+              <motion.button
+                layoutId="button-loading"
+                className="button flex-1"
+              >
+                Login
+              </motion.button>
+            )}
           </div>
         </form>
         <button className="my-3 underline">Recover your account</button>
