@@ -18,12 +18,12 @@ export default function Create({ dayKey, createDay }: { dayKey: string; createDa
   const day = parseDate(dayKey);
   const { register, handleSubmit, setValue, watch } = useForm<z.infer<typeof CreateDayActionPayload>>();
   const currentValues = watch();
-  const router = ()
+  // const router = ()
   async function submit(data: z.infer<typeof CreateDayActionPayload>) {
     data.date = dayKey
     console.log('loading');
     const result = await createDay(data);
-    if(result.ok)router.reload()
+    if(result.ok)location.reload()
     else{
       alert(result.error)
     }    
