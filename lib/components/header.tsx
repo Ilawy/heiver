@@ -1,7 +1,6 @@
 "use client"
 import React, { Fragment } from "react";
 import { Link } from "@/lib/hash";
-import { useRouter } from "next/router";
 import { useLocation } from "react-use";
 import MotionDiv from "./mdiv";
 import { useParams, usePathname } from "next/navigation";

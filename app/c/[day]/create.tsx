@@ -13,13 +13,12 @@ import level_3_src from "@/public/level_3.png";
 import level_4_src from "@/public/level_4.png";
 import level_5_src from "@/public/level_5.png";
 import { z } from "zod";
-import { useRouter } from "next/router";
 
 export default function Create({ dayKey, createDay }: { dayKey: string; createDay: typeof _createDay }) {
   const day = parseDate(dayKey);
   const { register, handleSubmit, setValue, watch } = useForm<z.infer<typeof CreateDayActionPayload>>();
   const currentValues = watch();
-  const router = useRouter()
+  const router = ()
   async function submit(data: z.infer<typeof CreateDayActionPayload>) {
     data.date = dayKey
     console.log('loading');
