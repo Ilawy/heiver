@@ -1,0 +1,3 @@
+[submodule "rlh-shared"]
+	path = rlh-shared
+	url = git@github.com:Ilawy/rlh-shared.git
