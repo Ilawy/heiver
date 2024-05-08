@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { formData } from "zod-form-data";
-import { IUsers } from "./db/schema";
+import { IUsers } from "./db/schema.ts";
 
 export const DayDate = z.string().regex(/^\d{1,2}-\d{1,2}-\d{4}$/);
 

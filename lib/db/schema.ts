@@ -1,8 +1,5 @@
-import { sql } from 'drizzle-orm'
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { createInsertSchema, createSelectSchema, jsonSchema } from 'drizzle-zod'
-import { z } from 'zod'
-import { DayDate } from '../types'
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 
 
 
