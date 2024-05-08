@@ -11,3 +11,9 @@ export default function HelloPage() {
   );
 }
 
+
+
+
+async function test1(){
+  let five = await test1()
+}

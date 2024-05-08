@@ -5,7 +5,7 @@ import Header, { PP } from "@/lib/components/header";
 import Ranger from "@/lib/components/ranger";
 import { useForm } from "react-hook-form";
 import { useEffect, useId } from "react";
-import { type createDay as _createDay } from '@/lib/actions'
+import { type createDay as _createDay } from "@/lib/actions";
 
 import level_1_src from "@/public/level_1.png";
 import level_2_src from "@/public/level_2.png";
@@ -14,19 +14,27 @@ import level_4_src from "@/public/level_4.png";
 import level_5_src from "@/public/level_5.png";
 import { z } from "zod";
 
-export default function Create({ dayKey, createDay }: { dayKey: string; createDay: typeof _createDay }) {
+export default function Create(
+  { dayKey, createDay }: { dayKey: string; createDay: typeof _createDay },
+) {
   const day = parseDate(dayKey);
-  const { register, handleSubmit, setValue, watch } = useForm<z.infer<typeof CreateDayActionPayload>>();
+  const { register, handleSubmit, setValue, watch } = useForm<
+    z.infer<typeof CreateDayActionPayload>
+  >();
   const currentValues = watch();
   // const router = ()
   async function submit(data: z.infer<typeof CreateDayActionPayload>) {
-    data.date = dayKey
-    console.log('loading');
-    const result = await createDay(data);
-    if(result.ok)location.reload()
-    else{
-      alert(result.error)
-    }    
+    try {
+      data.date = dayKey;
+      console.log("loading");
+      const result = await createDay(data);
+      if (result.ok) location.reload();
+      else {
+        alert(result.error);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   useEffect(() => {
@@ -55,7 +63,9 @@ export default function Create({ dayKey, createDay }: { dayKey: string; createDa
               onValueChange={(v) => setValue("religion", v[0])}
             />
             <AnimatePresence>
-              <LevelToImage level={currentValues.religion as 1 | 2 | 3 | 4 | 5} />
+              <LevelToImage
+                level={currentValues.religion as 1 | 2 | 3 | 4 | 5}
+              />
             </AnimatePresence>
           </div>
         </section>
@@ -96,8 +106,8 @@ export default function Create({ dayKey, createDay }: { dayKey: string; createDa
               {...register("note", {
                 maxLength: 255,
               })}
-
-            ></textarea>
+            >
+            </textarea>
             <span className="absolute right-3 bottom-3 text-sm text-gray-500">
               {currentValues.note?.length || 0} / 255
             </span>
@@ -124,7 +134,7 @@ function LevelToImage({ level }: { level: 1 | 2 | 3 | 4 | 5 }) {
       ? level_4_src
       : level_5_src;
 
-  const props = (l: number): React.ComponentProps<typeof motion.img> =>({
+  const props = (l: number): React.ComponentProps<typeof motion.img> => ({
     width: 48,
     height: 48,
     style: {
